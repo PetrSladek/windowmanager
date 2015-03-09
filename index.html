@@ -3,9 +3,99 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+        }
+        body {
+            position: relative;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #eeeeee;
+        }
+
+
+        .window {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 300px;
+            height: 200px;
+
+            border: 1px solid gray;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            background: white;
+        }
+
+        .window.maximalize {
+            /* important abt to prebilo natevenou velikost okna */
+            width: auto !important;
+            height: auto !important;;
+            top: 0 !important;
+            left: 0 !important;;
+            bottom: 0 !important;;
+            right: 0 !important;;
+        }
+
+        .window-header {
+            padding: 5px 10px;
+
+            background: black;
+            color: white;
+        }
+
+        .window-content {
+            padding: 5px 10px;
+
+            background: white;
+            /*box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;*/
+        }
+
+        #myWindow1 {
+            top: 100px;
+            left: 200px;
+
+            width: 800px;
+            height: 600px;
+        }
+
+
+
+    </style>
 </head>
 <body>
     <div class="desktop">
+
+        <div class="window" id="myWindow1">
+            <div class="window-header">
+                <div class="pull-left">
+                    <i class="icon-app1"></i> První okno
+                </div>
+                <div class="pull-right">
+                    <a href="#myWindow1" data-window="maximalize"><i class="icon-maximalize"></i></a>
+                    <a href="#myWindow1" data-window="close"><i class="icon-close"></i></a>
+                </div>
+            </div>
+            <div class="window-content">
+                Obsah okna!
+            </div>
+        </div>
+
 
     </div>
 </body>
