@@ -1,2 +1,3 @@
-# windowmanager
-School project to course WAP 2015
+# Spravce oken
+
+V HTML dokumentu mějme element div s nastavenou třídou (class) "desktop" a v něm vnořené prvky div s class="window". Vytvořte funkci v JavaScriptu, která vyhledá takové prvky v dokumentu, prvek desktop zobrazí jako ohraničenou oblast stránky a prvky window jako okna přesouvatelná v této oblasti. Výchozí velikost oken bude definována pomocí CSS např. s využitím dodatečných tříd příslušných elementů. Implementujte titulek okna s ikonami, přesouvání okna tažením v rámci dané oblasti, změnu velikosti okna myší, zvětšení na celou oblast (maximalizaci) a zmenšení zpět na původní rozměr. Je-li v dokumentu více oblastí "desktop", jsou na sobě zcela nezávislé.
