@@ -2,9 +2,9 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Správce oken</title>
 
-    <style>
+    <style type="text/css">
 
         * {
             box-sizing: border-box;
@@ -22,9 +22,6 @@
 
         .desktop {
             position: relative;
-            width: 100%;
-            height: 100%;
-            background: #eeeeee;
         }
 
 
@@ -37,12 +34,14 @@
             width: 300px;
             height: 200px;
 
-            border: 1px solid gray;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            /*border: 1px solid gray;*/
+            box-shadow: 0 0 5px rgba(0,0,0,0.5), 5px 5px 5px rgba(0,0,0,0.1);
             background: white;
+
+            border-radius: 5px;
         }
 
-        .window.maximalize {
+        .window.maximalized {
             /* important abt to prebilo natevenou velikost okna */
             width: auto !important;
             height: auto !important;;
@@ -55,31 +54,69 @@
         .window-header {
             padding: 5px 10px;
 
-            background: black;
-            color: white;
+            background: #D8D8D8;
+            border-radius: 5px 5px 0 0;
+
+            color: black;
+            text-shadow: 0 0 3px white;
         }
 
         .window-content {
             padding: 5px 10px;
 
-            background: white;
+            /*background: white;*/
             /*box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;*/
         }
+
+
+        #myDesktop1 {
+            float: left;
+            width: 50%;
+            height: 100%;
+            background: #eeeeee url(bg.png) no-repeat center top;
+        }
+        #myDesktop2 {
+            float: left;
+            width: 50%;
+            height: 100%;
+            background: #d0ee4b url(bg.png) no-repeat center top;
+        }
+
+
 
         #myWindow1 {
             top: 100px;
             left: 200px;
 
-            width: 800px;
-            height: 600px;
+            width: 200px;
+            height: 300px;
+        }
+
+        #myWindow2 {
+            top: 400px;
+            left: 300px;
+
+            width: 200px;
+            height: 300px;
+        }
+
+        #myWindow3 {
+            top: 400px;
+            left: 300px;
+
+            width: 200px;
+            height: 300px;
         }
 
 
 
     </style>
+
+
+
 </head>
 <body>
-    <div class="desktop">
+    <div class="desktop"  id="myDesktop1">
 
         <div class="window" id="myWindow1">
             <div class="window-header">
@@ -96,7 +133,192 @@
             </div>
         </div>
 
+        <div class="window" id="myWindow2">
+            <div class="window-header">
+                <div class="pull-left">
+                    <i class="icon-app1"></i> Druhý okno
+                </div>
+                <div class="pull-right">
+                    <a href="#myWindow2" data-window="maximalize"><i class="icon-maximalize"></i></a>
+                    <a href="#myWindow2" data-window="close"><i class="icon-close"></i></a>
+                </div>
+            </div>
+            <div class="window-content">
+                Obsah okna!
+            </div>
+        </div>
 
     </div>
+
+
+    <div class="desktop" id="myDesktop2">
+
+        <div class="window" id="myWindow3">
+            <div class="window-header">
+                <div class="pull-left">
+                    <i class="icon-app1"></i> Třetí okno
+                </div>
+                <div class="pull-right">
+                    <a href="#myWindow2" data-window="maximalize"><i class="icon-maximalize"></i></a>
+                    <a href="#myWindow2" data-window="close"><i class="icon-close"></i></a>
+                </div>
+            </div>
+            <div class="window-content">
+                Obsah okna!
+            </div>
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript">
+        var posX = 0, posY = 0;
+
+        function mouseEvent(e) {
+            if (e) {
+                this.e = e;
+            } else {
+                this.e = window.event; //  IE
+            }
+
+            if(e.pageX) {
+                this.x = e.pageX;
+            } else {
+                this.x = e.clientX; // IE
+            }
+
+            if(e.pageY) {
+                this.y = e.pageY;
+            } else {
+                this.y = e.clientY; // IE
+            }
+
+            if(e.target) {
+                this.element = e.target;
+            } else {
+                this.element = e.srcElement; // IE
+            }
+
+        }
+
+        function addDocumentEventListener(typ, callback)
+        {
+            if (document.addEventListener) {
+                document.addEventListener(typ, callback, false);
+            } else if (document.attachEvent) {
+                document.attachEvent("on"+typ, callback, false); // IE
+            }
+        }
+
+        function removeDocumentEventListener(typ, callback)
+        {
+            if (document.removeEventListener) {
+                document.removeEventListener(typ, callback, false);
+            } else if (document.detachEvent) {
+                document.detachEvent("on"+typ, callback, false); // IE
+            }
+        }
+
+
+        var closest = function(el, sel) {
+            if (el != null)
+                return el.matches(sel) ? el : (el.querySelector(sel) || closest(el.parentNode, sel));
+        }
+        var forEach = function (array, callback, scope) {
+            for (var i = 0; i < array.length; i++) {
+                callback.call(scope, i, array[i]); // passes back stuff we need
+            }
+        };
+
+
+        function startDrag(e)
+        {
+            var e = new mouseEvent(e)
+
+            var win = closest(e.element, '.window');
+
+//            posX = e.x - parseInt(win.style.left);
+//            posY = e.y - parseInt(win.style.top);
+            posX = e.x - parseInt(win.offsetLeft);
+            posY = e.y - parseInt(win.offsetTop);
+
+            addDocumentEventListener("mousemove", drag);
+            addDocumentEventListener("mouseup", stopDrag);
+
+//            document.getElementById(”cilovyDiv”).innerHTML = “”;
+        }
+
+        function drag(e)
+        {
+            var e = new mouseEvent(e);
+
+            var win = closest(e.element, '.window');
+
+            var x = e.x - posX;
+            win.style.left = x + "px";
+            var y = e.y - posY;
+            win.style.top = y + "px";
+        }
+
+        function stopDrag(e)
+        {
+            removeDocumentEventListener("mousemove", drag);
+        }
+
+
+
+        function Win(element) {
+
+            this.element = element;
+            this.header = element.querySelector('.window-header')
+
+            // Pozice v ramci desktopu
+            this.x = 0;
+            this.y = 0;
+
+            this.header.addEventListener('mousedown', startDrag)
+
+
+            this.setPosition = function(x, y) {
+                this.x = x;
+                this.x = y;
+            }
+
+            this.maximalize = function () {
+                this.element.classList.add('maximalize');
+            }
+            
+            this.restore = function () {
+                this.element.classList.remove('maximalize');
+            }
+
+        }
+
+
+        function Desktop(element) {
+            this.element = element;
+            this.windows = [];
+
+            this.attachWindow = function(window) {
+                this.windows.push(window);
+            }
+        }
+
+
+        var desktops = document.querySelectorAll(".desktop");
+        forEach(desktops, function (index, value) {
+            var desktop = new Desktop(value);
+
+            var windows = value.querySelectorAll(".window");
+            forEach(windows, function (index, value) {
+                var win = new Win(value);
+                desktop.attachWindow(win);
+            });
+        });
+
+
+
+
+    </script>
 </body>
 </html>
