@@ -29,6 +29,7 @@
 
         .window {
             position: absolute;
+            overflow: hidden;
 
             z-index: 2;
 
@@ -53,6 +54,9 @@
             left: 0 !important;;
             bottom: 0 !important;;
             right: 0 !important;;
+
+            z-index: 3;
+            /*border-radius: 0;*/
         }
 
         .window-header {
@@ -62,7 +66,7 @@
             border-radius: 5px 5px 0 0;
 
             color: black;
-            text-shadow: 0 0 3px white;
+            /*text-shadow: 0 0 3px white;*/
         }
 
         .window-content {
@@ -128,8 +132,8 @@
                     <i class="icon-app1"></i> První okno
                 </div>
                 <div class="pull-right">
-                    <a href="#myWindow1" data-window="maximalize"><i class="icon-maximalize"></i></a>
-                    <a href="#myWindow1" data-window="close"><i class="icon-close"></i></a>
+                    <a href="#myWindow1" data-window="toggle-maximalize"><i class="icon-toggle-maximalize">O</i></a>
+                    <a href="#myWindow1" data-window="close"><i class="icon-close">x</i></a>
                 </div>
             </div>
             <div class="window-content">
@@ -143,8 +147,8 @@
                     <i class="icon-app1"></i> Druhý okno
                 </div>
                 <div class="pull-right">
-                    <a href="#myWindow2" data-window="maximalize"><i class="icon-maximalize"></i></a>
-                    <a href="#myWindow2" data-window="close"><i class="icon-close"></i></a>
+                    <a href="#myWindow2" data-window="toggle-maximalize"><i class="icon-toggle-maximalize">O</i></a>
+                    <a href="#myWindow2" data-window="close"><i class="icon-close">x</i></a>
                 </div>
             </div>
             <div class="window-content">
@@ -163,8 +167,8 @@
                     <i class="icon-app1"></i> Třetí okno
                 </div>
                 <div class="pull-right">
-                    <a href="#myWindow2" data-window="maximalize"><i class="icon-maximalize"></i></a>
-                    <a href="#myWindow2" data-window="close"><i class="icon-close"></i></a>
+                    <a href="#myWindow3" data-window="toggle-maximalize"><i class="icon-toggle-maximalize">O</i></a>
+                    <a href="#myWindow3" data-window="close"><i class="icon-close">x</i></a>
                 </div>
             </div>
             <div class="window-content">
@@ -176,52 +180,6 @@
 
 
     <script type="text/javascript">
-
-        function mouseEvent(e)
-        {
-            if (e) {
-                this.e = e;
-            } else {
-                this.e = window.event; //  IE
-            }
-
-            if(e.pageX) {
-                this.x = e.pageX;
-            } else {
-                this.x = e.clientX; // IE
-            }
-
-            if(e.pageY) {
-                this.y = e.pageY;
-            } else {
-                this.y = e.clientY; // IE
-            }
-
-            if(e.target) {
-                this.element = e.target;
-            } else {
-                this.element = e.srcElement; // IE
-            }
-
-        }
-
-        function addEventListener(el, typ, callback)
-        {
-            if (el.addEventListener) {
-                el.addEventListener(typ, callback, false);
-            } else if (el.attachEvent) {
-                el.attachEvent("on"+typ, callback, false); // IE
-            }
-        }
-
-        function removeEventListener(el, typ, callback)
-        {
-            if (el.removeEventListener) {
-                el.removeEventListener(typ, callback, false);
-            } else if (document.detachEvent) {
-                el.detachEvent("on"+typ, callback, false); // IE
-            }
-        }
 
 
         var closest = function(el, sel) {
@@ -238,17 +196,10 @@
 
         var draggable = {
 
-                enableDragCursor: function(desktop) {
-                    desktop.element.style.cursor='move';
-                },
-                disableDragCursor: function(desktop) {
-                    desktop.element.style.cursor='default';
-                },
-
-                startDrag: function(desktop, win, e) {
+                startDrag: function(win, e) {
                     e = e || window.event;
 
-                    draggable.enableDragCursor(desktop);
+                    win.desktop.element.style.cursor = 'move';
 
                     var diffX = e.clientX - win.getX(),
                         diffY = e.clientY - win.getY();
@@ -256,37 +207,189 @@
                     document.onmousemove = function(e){
                         e = e || window.event;
 
-                        var aX = e.clientX - diffX,
-                            aY = e.clientY - diffY;
+                        var x = e.clientX - diffX,
+                            y = e.clientY - diffY;
 
-                        var x = aX;
-                        var y = aY;
                         win.setPosition(x, y);
+
                     }
 
                 },
-                stopDrag: function(desktop, e) {
-                    document.onmousemove = function(){}
-                    draggable.disableDragCursor(desktop);
+                stopDrag: function(win, e) {
+                    document.onmousemove = function(){};
+
+                    win.desktop.element.style.cursor = null;
+                },
+
+
+
+
+
+
+                startResizeBottom: function (win, e) {
+                    var height = win.getHeight();
+                    var y = e.clientY;
+
+                    var mv = function(e){
+                        e = e || window.event;
+                        var diffY = e.clientY - y;
+                        win.setHeight(height+diffY);
+                    };
+                    var up = function (e) {
+                        document.removeEventListener('mousemove', mv, true);
+                        document.removeEventListener('mouseup', up, true);
+                    }
+                    document.addEventListener('mousemove', mv, true);
+                    document.addEventListener('mouseup', up, true);
+                },
+                startResizeTop: function (win, e) {
+                    var height = win.getHeight();
+                    var top = win.getY();
+                    var y = e.clientY;
+
+                    var mv = function(e){
+                        e = e || window.event;
+
+                        var diffY = e.clientY - y;
+
+                        if(height-diffY <= win.resizeBound)
+                            return;
+                        win.setY(top+diffY);
+                        win.setHeight(height-diffY);
+                    }
+                    var up = function (e) {
+                        document.removeEventListener('mousemove', mv, true);
+                        document.removeEventListener('mouseup', up, true);
+                    }
+                    document.addEventListener('mousemove', mv, true);
+                    document.addEventListener('mouseup', up, true);
+                },
+                startResizeLeft: function (win, e) {
+                    var width = win.getWidth();
+                    var left = win.getX();
+                    var x = e.clientX;
+
+
+                    var mv = function(e){
+                        e = e || window.event;
+                        var diffX = e.clientX - x;
+
+                        if(width-diffX <= win.resizeBound)
+                            return;
+                        win.setX(left+diffX);
+                        win.setWidth(width-diffX);
+                    };
+                    var up = function (e) {
+                        document.removeEventListener('mousemove', mv, true);
+                        document.removeEventListener('mouseup', up, true);
+                    }
+                    document.addEventListener('mousemove', mv, true);
+                    document.addEventListener('mouseup', up, true);
+                },
+                startResizeRight: function (win, e) {
+                    var width = win.getWidth();
+                    var x = e.clientX;
+
+                    var mv = function(e){
+                        e = e || window.event;
+                        var diffX = e.clientX - x;
+                        win.setWidth(width+diffX);
+                    }
+                    var up = function (e) {
+                        document.removeEventListener('mousemove', mv, true);
+                        document.removeEventListener('mouseup', up, true);
+                    }
+                    document.addEventListener('mousemove', mv, true);
+                    document.addEventListener('mouseup', up, true);
+                },
+                stopResize: function (win, e) {
+                    win.desktop.element.style.cursor = null;
+                    document.onmousemove = function() {};
                 }
         }
 
         function Win(element) {
 
             var self = this;
+            element._window = self;
 
             this.element = element;
             this.desktop = null;
 
+            this.resizeBound = 10;
+
             this.header = element.querySelector('.window-header')
-
-
             this.header.onmousedown = function(e) {
-                draggable.startDrag(self.desktop, self, e);
+                e = e || window.event;
+                e.preventDefault();
+
+                var x = e.offsetX || e.layerX;
+                var y = e.offsetY || e.layerY;
+
+                if(y > self.resizeBound  && x > self.resizeBound && x < self.getWidth() - self.resizeBound)
+                    draggable.startDrag(self, e);
+
             };
             this.header.onmouseup = function (e) {
-                draggable.stopDrag(self.desktop, e);
+                draggable.stopDrag(self, e);
             };
+
+            this.element.onmousemove = function(e) {
+                e = e || window.event;
+
+                var x = e.offsetX || e.layerX;
+                var y = e.offsetY || e.layerY;
+
+                // resize-top
+                if(y < self.resizeBound) {
+                    self.element.style.cursor = 's-resize';
+                }
+                // resize-bottom
+                else if(y > self.getHeight() - self.resizeBound) {
+                    self.element.style.cursor = 's-resize';
+                }
+                // resize-left
+                else if(x < self.resizeBound) {
+                    self.element.style.cursor = 'e-resize';
+                }
+                // resize-right
+                else if(x > self.getWidth() - self.resizeBound) {
+                    self.element.style.cursor = 'e-resize';
+                }
+                // non resize
+                else {
+                    self.element.style.cursor = null;
+                }
+            };
+            this.element.onmousedown = function(e) {
+                e = e || window.event;
+                e.preventDefault();
+
+                var x = e.offsetX || e.layerX;
+                var y = e.offsetY || e.layerY;
+
+                // resize-top
+                if(y < self.resizeBound) {
+                    draggable.startResizeTop(self, e);
+                }
+                // resize-bottom
+                if(y > self.getHeight() - self.resizeBound) {
+                    draggable.startResizeBottom(self, e);
+                }
+                // resize-left
+                if(x < self.resizeBound) {
+                    draggable.startResizeLeft(self, e)
+                }
+                // resize-right
+                if(x > self.getWidth() - self.resizeBound) {
+                   draggable.startResizeRight(self, e)
+                }
+
+            };
+//            document.onmouseup = function(e) {
+//                draggable.stopResize(self, e);
+//            };
+
 
             this.setPosition = function(x, y) {
                 this.setX(x);
@@ -320,26 +423,43 @@
 
 
             this.getWidth = function() {
-                return parseInt(this.element.width) || this.element.offsetWidth;
+                return parseInt(this.element.style.width) || this.element.offsetWidth;
             };
             this.getHeight = function() {
-                return parseInt(this.element.height) || this.element.offsetHeight;
+                return parseInt(this.element.style.height) || this.element.offsetHeight;
+            };
+
+            this.setWidth = function(width) {
+                if(width < self.resizeBound)
+                    width = self.resizeBound;
+                this.element.style.width = width + "px";
+            };
+            this.setHeight = function(height) {
+                if(height < self.resizeBound)
+                    height = self.resizeBound;
+                this.element.style.height = height + "px";
             };
 
 
+            this.close = function () {
+                this.element.remove();
+            };
             this.maximalize = function () {
-                this.element.classList.add('maximalize');
+                this.element.classList.add('maximalized');
+            };
+            this.restore = function () {
+                this.element.classList.remove('maximalized');
+            };
+            this.toggleMaximalize = function() {
+                this.element.classList.toggle('maximalized');
             };
 
-            this.restore = function () {
-                this.element.classList.remove('maximalize');
-            };
+
+
 
             this.attachTo = function(desktop) {
                 this.desktop = desktop;
             };
-
-
 
 
         }
@@ -355,26 +475,48 @@
             };
 
             this.getWidth = function() {
-                return parseInt(this.element.width) || this.element.offsetWidth;
+                return parseInt(this.element.style.width) || this.element.offsetWidth;
             };
             this.getHeight = function() {
-                return parseInt(this.element.height) || this.element.offsetHeight;
+                return parseInt(this.element.style.height) || this.element.offsetHeight;
             };
 
         }
 
 
         var desktops = document.querySelectorAll(".desktop");
-        forEach(desktops, function (index, value) {
-            var desktop = new Desktop(value);
+        forEach(desktops, function (index, el) {
+            var desktop = new Desktop(el);
 
-            var windows = value.querySelectorAll(".window");
-            forEach(windows, function (index, value) {
-                var win = new Win(value);
+            var windows = el.querySelectorAll(".window");
+            forEach(windows, function (index, el) {
+                var win = new Win(el);
                 desktop.attachWindow(win);
             });
         });
 
+        var closes = document.querySelectorAll("[data-window=close]");
+        forEach(closes, function (index, el) {
+            el.onclick = function (e) {
+                e.preventDefault();
+
+                var target = el.hash || el.dataset.target;
+
+                var element =  document.getElementById(target.substr(1));
+                element._window.close();
+            }
+        });
+        var toggleMaximalize = document.querySelectorAll("[data-window=toggle-maximalize]");
+        forEach(toggleMaximalize, function (index, el) {
+            el.onclick = function (e) {
+                e.preventDefault();
+
+                var target = el.hash || el.dataset.target;
+
+                var element =  document.getElementById(target.substr(1));
+                element._window.toggleMaximalize();
+            }
+        });
 
 
 
