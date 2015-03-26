@@ -47,13 +47,15 @@
             width: 300px;
             height: 200px;
 
-            /*border: 1px solid gray;*/
             box-shadow: 0 0 5px rgba(0,0,0,0.5), 5px 5px 5px rgba(0,0,0,0.1);
             background: white;
 
             border-radius: 5px;
 
-            /*transition: 0.1s all ease-in-out;*/
+            opacity: 0.77;
+        }
+        .window.active {
+            opacity: 1;
         }
 
         .window.maximalized {
@@ -67,7 +69,7 @@
 
             z-index: 3;
             /*border-radius: 0;*/
-
+            opacity: 1;
 
         }
 
@@ -325,7 +327,7 @@
                     var mv = function(e){
                         e = e || window.event;
 
-                        if(e.clientX < 0)
+                        if(e.clientX < win.desktop.getX())
                             return;
 
 
@@ -373,6 +375,12 @@
             this.resizeBound = 10;
 
             this.header = element.querySelector('.window-header')
+            this.header.ondblclick = function (e) {
+                e = e || window.event;
+                e.preventDefault()
+
+                self.toggleMaximalize();
+            };
             this.header.onmousedown = function(e) {
                 e = e || window.event;
                 e.preventDefault();
@@ -546,12 +554,14 @@
 
             this.sendToBack = function() {
                 this.element.style.zIndex = 2;
+                this.element.classList.remove('active');
             }
             this.sendToTop = function() {
                 this.desktop.windows.forEach(function(win) {
                     win.sendToBack();
                 });
                 this.element.style.zIndex = 3;
+                this.element.classList.add('active');
             }
 
 
@@ -574,6 +584,13 @@
             };
             this.getHeight = function() {
                 return parseInt(this.element.style.height) || this.element.offsetHeight;
+            };
+
+            this.getX = function() {
+                return this.element.offsetLeft;
+            };
+            this.getY = function() {
+                return this.element.offsetTop;
             };
 
         }
