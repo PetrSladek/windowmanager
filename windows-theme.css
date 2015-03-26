@@ -1,0 +1,38 @@
+.window {
+    width: 300px; /* vychozi velikost */
+    height: 200px;
+
+    background: white;
+
+    box-shadow: 0 0 5px rgba(0,0,0,0.5), 5px 5px 5px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    opacity: 0.77;
+}
+.window.active {
+    opacity: 1;
+}
+
+.window-header {
+    padding: 5px 10px;
+    background: #D8D8D8;
+    border-radius: 5px 5px 0 0;
+    color: black;
+    height: 2em;
+}
+
+.window-header img.window-header-icon {
+    border-radius: 5px;
+}
+
+.window-header *[class^="icon-"] {
+    opacity: 0.8;
+    transition: 0.3s all ease-in-out;
+    border-radius: 5px;
+}
+.window-header *[class^="icon-"]:hover {
+    opacity: 1;
+}
+
+.window-content {
+    padding: 5px 10px;
+}

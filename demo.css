@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+body {
+    position: relative;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: 'Myriad Pro', Arial, sans-serif;
+}
+
+
+
+
+#myDesktop1 {
+    float: left;
+    width: 50%;
+    height: 100%;
+    background: #eeeeee url(bg.png) no-repeat center top;
+}
+#myDesktop2 {
+    float: left;
+    width: 50%;
+    height: 100%;
+    background: #d0ee4b url(bg.png) no-repeat center top;
+}
+
+
+
+#myWindow1 {
+    top: 100px;
+    left: 200px;
+
+    width: 400px;
+    height: 300px;
+}
+
+#myWindow2 {
+    top: 400px;
+    left: 300px;
+
+    width: 500px;
+    height: 300px;
+}
+
+#myWindow3 {
+    top: 30%;
+    left: 30%;
+
+    width: 200px;
+    height: 300px;
+}
+
+
+#myWindow4 {
+    top: 30px;
+    left: 30px;
+
+    width: 300px;
+    height: 300px;
+}
