@@ -1,17 +1,23 @@
+/* Kazde okno */
 .window {
     width: 300px; /* vychozi velikost */
     height: 200px;
 
-    background: white;
+    background: white; /* Pozadi okna */
 
-    box-shadow: 0 0 5px rgba(0,0,0,0.5), 5px 5px 5px rgba(0,0,0,0.1);
-    border-radius: 5px;
-    opacity: 0.77;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5), 5px 5px 5px rgba(0,0,0,0.1); /* Vrzeny stin */
+    border-radius: 5px; /* Zaobleni */
+    opacity: 0.77; /* pruhlednost, neaktivniho okna */
+
+    transition: 0.2s opacity ease-in-out;
 }
+
+/* Akrivni okno vramci sve plochy */
 .window.active {
-    opacity: 1;
+    opacity: 1; /* Pruhlednost = je plne videt */
 }
 
+/* Hlavicka okna (panel s ikonami) */
 .window-header {
     padding: 5px 10px;
     background: #D8D8D8;
@@ -20,19 +26,23 @@
     height: 2em;
 }
 
+/* Ikona okna (vlevo) */
 .window-header img.window-header-icon {
-    border-radius: 5px;
+    border-radius: 5px; /* Zaobleni */
 }
 
+/* Ikony vpravo - Maximalizece a Zavreni okna */
 .window-header *[class^="icon-"] {
     opacity: 0.8;
     transition: 0.3s all ease-in-out;
     border-radius: 5px;
 }
+/* Ikony vpravo po najeti mysi */
 .window-header *[class^="icon-"]:hover {
     opacity: 1;
 }
 
+/* Obsah okna */
 .window-content {
-    padding: 5px 10px;
+    padding: 5px 10px; /* Odsazeni od kraje */
 }

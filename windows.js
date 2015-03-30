@@ -23,7 +23,7 @@ var windows = {
             document.removeEventListener('mousemove', mv, true);
             document.removeEventListener('mouseup', up, true);
 
-            win.desktop.element.style.cursor = null;
+            win.desktop.element.style.cursor = '';
         }
         document.addEventListener('mousemove', mv, true);
         document.addEventListener('mouseup', up, true);
@@ -187,7 +187,7 @@ function Win(element) {
         }
         // non resize
         else {
-            self.element.style.cursor = null;
+            self.element.style.cursor = '';
         }
     };
     this.element.onmousedown = function(e) {
