@@ -25,7 +25,7 @@ Příklad
 ```
 Plochám i oknům je možné vlasními CSS styly nastavit velikost či cokoliv jiného
 
-# Okna s titulkem
+## Okna s titulkem
 Pokud chceme mít u oken hlavičku s titulkem, ikonou a tlačítky pro zavírání a maximalizaci musíme použít následující kód
 
 ```html

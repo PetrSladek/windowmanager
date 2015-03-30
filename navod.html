@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Návod k windows.js</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+
+    <link href="https://assets-cdn.github.com/assets/github-d98828367ca761e15e4b04a5db8e44ccd8df8389fc87492036446bfc448520cd.css" media="all" rel="stylesheet" />
+    <link href="https://assets-cdn.github.com/assets/github2-f3dd13aa7343acc45e12cf9d3301f42e6726b4db02b87f13ddc9d9c035008fdd.css" media="all" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Spravce oken</h1>
+
+    <p>Spravce oken je mala knihovna umoznujici pohzbovat s okny, zvětšovat a zmenšovat je, případně je maximalizovat v rámci své plochy.</p>
+
+    <h2>Pripojeni do stránky</h2>
+
+    <p>Pro přidání knihovny do stránky je potřeba připojit následující soubory</p>
+
+<div class="highlight highlight-html"><pre><span class="pl-c">&lt;!-- Styl nutny pro funkcnost spravce oken --&gt;</span>
+&lt;<span class="pl-ent">link</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>windows.css<span class="pl-pds">"</span></span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/css<span class="pl-pds">"</span></span> <span class="pl-e">media</span>=<span class="pl-s"><span class="pl-pds">"</span>all<span class="pl-pds">"</span></span> /&gt;
+<span class="pl-c">&lt;!-- Styl upravujici vyhled spravce oken  --&gt;</span>
+&lt;<span class="pl-ent">link</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>windows-theme.css<span class="pl-pds">"</span></span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/css<span class="pl-pds">"</span></span> <span class="pl-e">media</span>=<span class="pl-s"><span class="pl-pds">"</span>all<span class="pl-pds">"</span></span> /&gt;
+<span class="pl-c">&lt;!-- Javascriptova knihovna zajistujici obsluhu --&gt;</span>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>windows.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+    <h2>Plochy a okna</h2>
+
+    <p>Plochou se stane každý blokový HTML element, kterému nastavíme třídu <code>class="desktop"</code>. Oknem poté každý jeho potomek s třídou <code>class="window"</code></p>
+
+    <p>Příklad</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>desktop<span class="pl-pds">"</span></span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 800px; height: 800px<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>window<span class="pl-pds">"</span></span>&gt;Obsah prvního okna&lt;/<span class="pl-ent">div</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>window<span class="pl-pds">"</span></span>&gt;Obsah druhého okna&lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+    <p>Plochám i oknům je možné vlasními CSS styly nastavit velikost či cokoliv jiného</p>
+
+    <h2>Okna s titulkem</h2>
+
+    <p>Pokud chceme mít u oken hlavičku s titulkem, ikonou a tlačítky pro zavírání a maximalizaci musíme použít následující kód</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>window<span class="pl-pds">"</span></span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>myWindow1<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>window-header<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>pull-left<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">img</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>window-header-icon<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>icon.png<span class="pl-pds">"</span></span> <span class="pl-e">alt</span>=<span class="pl-s"><span class="pl-pds">"</span>.<span class="pl-pds">"</span></span> /&gt; Titulek okna
+        &lt;/<span class="pl-ent">div</span>&gt;
+        &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>pull-right<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>#myWindow1<span class="pl-pds">"</span></span> <span class="pl-e">data-window</span>=<span class="pl-s"><span class="pl-pds">"</span>toggle-maximalize<span class="pl-pds">"</span></span>&gt;&lt;<span class="pl-ent">i</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>icon-toggle-maximalize<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">i</span>&gt;&lt;/<span class="pl-ent">a</span>&gt;
+            &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>#myWindow1<span class="pl-pds">"</span></span> <span class="pl-e">data-window</span>=<span class="pl-s"><span class="pl-pds">"</span>close<span class="pl-pds">"</span></span>&gt;&lt;<span class="pl-ent">i</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>icon-close<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">i</span>&gt;&lt;/<span class="pl-ent">a</span>&gt;
+        &lt;/<span class="pl-ent">div</span>&gt;
+    &lt;/<span class="pl-ent">div</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>window-content<span class="pl-pds">"</span></span>&gt;
+        Obsah okna!
+    &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+    <p>Každý odkaz <code>&lt;a&gt;..&lt;/a&gt;</code> s atributem <code>data-window="close"</code> zavře okno jehož ID j v atributu <code>href</code>. To znamená že do obsahu libovolného okna, plochy či kamkoliv jinam můžeme umístit tlačítko na zavření konkrétího okna.</p>
+
+    <p>Stejně to funguje i pro tlačátko na Maximalizaci/Obnovení okna. Tuto funkci vykoná odkaz s atributem <code>data-window="toggle-maximalize"</code>.</p>
+
+    <p>Hlavička okna je nastylovaná ve výchozím theme stylu. Obrázkek ikony okna je třeba volžit dle ppředchozí ukázky.</p>
+
+    <h2>Autor</h2>
+    <p>
+        Petr Sládek<br />
+        <a href="mailto:xslade12@stud.fit.vutbr.cz">xslade12@stud.fit.vutbr.cz</a>
+    </p>
+</div>
+
+</body>
+</html>
