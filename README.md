@@ -50,5 +50,7 @@ Stejně to funguje i pro tlačátko na Maximalizaci/Obnovení okna. Tuto funkci 
 
 Hlavička okna je nastylovaná ve výchozím theme stylu. Obrázkek ikony okna je třeba volžit dle ppředchozí ukázky.
 
-
+## Autor
+Petr Sládek
+xslade12@stud.fit.vutbr.cz
 
